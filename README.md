@@ -2,6 +2,8 @@
 
 # pcalc
 
+This tool is as part of tool suite of [bitkub_crypto_tools](https://github.com/haxpor/bitkub_crypto_tools).
+
 Profit calculator with cryptocurrency neutral so it would work with any currency as it works with prices and volume.
 It also list out fees, and further margin when sell based on percentage.
 
