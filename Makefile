@@ -1,14 +1,28 @@
-.PHONY: all clean
+.PHONY: debug release clean
 
-OUT=pcalc
+# TODO: specify bitkub_commonlib directory, you can specify at the command lines if needed
+BITKUB_COMMONLIB_DIR = ../bitkub_commonlib
 
-all: ${OUT}
+COMPILER = g++
+CXXFLAGS = -std=c++17 -Wall -Wextra -pedantic -I.
+LINKFLAGS = $(BITKUB_COMMONLIB_DIR)/bin/release/libbitkub.a
+SRC_DIR = src
+SOURCES = main.cpp
+OBJS = $(addprefix $(SRC_DIR)/, $(addsuffix .o, $(basename $(notdir $(SOURCES)))))
+OUT = pcalc
 
-${OUT}: main.o
-	g++ -std=c++17 -Wall -Wextra -O3 $< -o $@
+release: CXXFLAGS += -I$(BITKUB_COMMONLIB_DIR)/bin/release/include -O3
+release: $(OUT)
 
-main.o: main.cpp
-	g++ -std=c++17 -Wall -Wextra -O3 -c $<
+debug: CXXFLAGS += -I$(BITKUB_COMMONLIB_DIR)/bin/debug/include
+debug: LINKFLAGS = $(BITKUB_COMMONLIB_DIR)/bin/debug/libbitkub.a
+debug: $(OUT)
+
+$(OUT): $(OBJS)
+	$(COMPILER) $(CXXFLAGS) $< $(LINKFLAGS) -o $@
+
+$(SRC_DIR)/%.o: $(SRC_DIR)/%.cpp
+	$(COMPILER) $(CXXFLAGS) -c $< -o $@
 
 clean:
-	rm -rf ${OUT} *.o
+	rm -f $(OUT) $(SRC_DIR)/*.o
