@@ -11,12 +11,15 @@ SOURCES = main.cpp
 OBJS = $(addprefix $(SRC_DIR)/, $(addsuffix .o, $(basename $(notdir $(SOURCES)))))
 OUT = pcalc
 
-release: CXXFLAGS += -I$(BITKUB_COMMONLIB_DIR)/bin/release/include -O3
-release: $(OUT)
+release: CXXFLAGS += -I$(BITKUB_COMMONLIB_DIR)/bin/release/include -O2
+release: $(OUT) strip_output
 
 debug: CXXFLAGS += -I$(BITKUB_COMMONLIB_DIR)/bin/debug/include
 debug: LINKFLAGS = $(BITKUB_COMMONLIB_DIR)/bin/debug/libbitkub.a
 debug: $(OUT)
+
+strip_output: $(OUT)
+	strip $<
 
 $(OUT): $(OBJS)
 	$(COMPILER) $(CXXFLAGS) $< $(LINKFLAGS) -o $@
