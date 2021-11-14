@@ -8,6 +8,11 @@
 #include <cstdio>
 #include <cstring>
 
+#ifndef _GNU_SOURCE 
+#define _GNU_SOURCE // for program_invocation_short_name
+#endif
+#include <errno.h>
+
 static void ComputeAndPrintProfitReferencePointEntry(double percentageMargin, double cryptoSellPrice, int strFormatWidth, double grossSellPrice, double amountCRYPTO_deductedFee, double amountToSpend, bool includedGrossCompute)
 {
 	const double actualMultiPercentage = 1.0 + percentageMargin/100.0;
@@ -43,14 +48,14 @@ int main(int argc, char* argv[])
 {
 	if (argc < 4)
 	{
-		std::cerr << "Usage: pcalc <amount-to-spend> <CRYPTO-buy-price> <CRYPTO-sell-price>\n";
+		std::cerr << "Usage: " << program_invocation_short_name << " <amount-to-spend> <CRYPTO-buy-price> <CRYPTO-sell-price>\n";
 		return -1;
 	}	
 
 	// this option takes higest priority than all others if included along with other options
 	if (bitkub::FoundCmdOption(argc, argv, "--help"))
 	{
-		std::cout << "Usage: pcalc <amount-to-spend> <CRYPTO-buy-price> <CRYPTO-sell-price>\n";
+		std::cout << "Usage: " << program_invocation_short_name << " <amount-to-spend> <CRYPTO-buy-price> <CRYPTO-sell-price>\n";
 		return 0;
 	}
 
